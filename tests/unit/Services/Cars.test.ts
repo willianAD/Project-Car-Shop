@@ -41,7 +41,7 @@ describe('Devera testar todas funcionalidades da tabela carros', function () {
     Sinon.restore();
   });
 
-  it('Devera buscar 1 carro no banco de dados pelo ID, SUCESSO', async function () {
+  it('Devera buscar um carro no banco de dados pelo ID, SUCESSO', async function () {
     const carOutPut = new Car(oneCar);
     
     Sinon.stub(Model, 'findById').resolves(carOutPut);
