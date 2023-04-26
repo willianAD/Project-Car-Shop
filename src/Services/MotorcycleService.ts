@@ -26,14 +26,14 @@ export default class MotorcycleService {
   async getMotorcycleById(id: string) {
     const motorcycleODM = new MotorcycleODM();
     const getMotorcycle = await motorcycleODM.findById(id);
-    if (!getMotorcycle) throw new ErrorMessage(404, 'Car not found');
+    if (!getMotorcycle) throw new ErrorMessage(404, 'Motorcycle not found');
     return this.createMotorcycleDomain(getMotorcycle);
   }
 
   async updateMotorcycleById(id: string, car: IMotorcycle) {
     const motorcycleODM = new MotorcycleODM();
     const getMotorcycle = await motorcycleODM.findById(id);
-    if (!getMotorcycle) throw new ErrorMessage(404, 'Car not found');
+    if (!getMotorcycle) throw new ErrorMessage(404, 'Motorcycle not found');
     const updateMotorcycle = await motorcycleODM.updateById(id, car);
     return this.createMotorcycleDomain(updateMotorcycle);
   }
