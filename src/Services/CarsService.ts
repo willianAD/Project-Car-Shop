@@ -1,6 +1,7 @@
 import Car from '../Domains/Car';
 import CarsODM from '../Models/CarsODM';
 import ICar from '../Interfaces/ICar';
+import ErrorMessage from '../Middlewares/ErrorHandler';
 
 export default class CarsService {
   private createCarDomain(car: ICar | null): Car | null {
@@ -25,8 +26,8 @@ export default class CarsService {
     const carODM = new CarsODM();
     const getCar = await carODM.findById(id);
     if (!getCar) {
-      throw new Error('Car not found');
+      throw new ErrorMessage(404, 'Car not found');
     }
-    return getCar;
+    return this.createCarDomain(getCar);
   }
 }

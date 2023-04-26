@@ -1,13 +1,22 @@
 import { NextFunction, Request, Response } from 'express';
 
-export default class ErrorHandler {
-  public static handle(
-    error: Error,
+export default class ErrorHandler extends Error {
+  status: number;
+  message: string;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+    this.message = message;
+  }
+
+  static ErrorMessage(
+    error: ErrorHandler,
     _req: Request,
     res: Response,
-    next: NextFunction,
+    _next: NextFunction,
   ) {
-    res.status(500).json({ message: error.message });
-    next();
+    const status = error.status || 500;
+    return res.status(status).send({ message: error.message });
   }
 }

@@ -1,5 +1,6 @@
 import { isValidObjectId, Model, model, models, Schema } from 'mongoose';
 import ICar from '../Interfaces/ICar';
+import ErrorMessage from '../Middlewares/ErrorHandler';
 
 export default class CarsODM {
   private schema: Schema;
@@ -27,8 +28,8 @@ export default class CarsODM {
   }
 
   async findById(id: string) {
-    if (!isValidObjectId) {
-      throw new Error('Invalid mongo id');
+    if (!isValidObjectId(id)) {
+      throw new ErrorMessage(422, 'Invalid mongo id');
     }
     return this.model.findById({ _id: id });
   }

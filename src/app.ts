@@ -6,6 +6,6 @@ const app = express();
 
 app.use(express.json());
 app.use(routes);
-app.use(ErrorHandler.handle);
+app.use(ErrorHandler.ErrorMessage);
 
 export default app;
