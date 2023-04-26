@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import Sinon from 'sinon';
 import { Model } from 'mongoose';
 import CarsService from '../../../src/Services/CarsService';
+// import CarsODM from '../../../src/Models/CarsODM';
 import Car from '../../../src/Domains/Car';
 
 const inputArray = [
@@ -39,14 +40,23 @@ const inputArray = [
 
 describe('Devera buscar todos os carros', function () {
   it('Devera buscar todos os carros no banco de dado corretamente', async function () {
-    const carOutPut = inputArray.map((car) => new Car(car));
-
+    const carOutPut = inputArray.map((car) => new Car({
+      id: car.id,
+      model: car.model,
+      year: car.year,
+      color: car.color,
+      status: car.status,
+      buyValue: car.buyValue,
+      doorsQty: car.doorsQty,
+      seatsQty: car.seatsQty,
+    }));
+    
     Sinon.stub(Model, 'find').resolves(carOutPut);
-
+    
     const service = new CarsService();
     const result = await service.getAllCar();
 
-    expect(result).to.be.equal(carOutPut);
+    expect(result).to.be.deep.equal({ status: 200, message: carOutPut });
   
     Sinon.restore();
   });
