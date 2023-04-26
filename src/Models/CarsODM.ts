@@ -1,4 +1,4 @@
-import { isValidObjectId, Model, model, models, Schema } from 'mongoose';
+import { isValidObjectId, Model, model, models, Schema, UpdateQuery } from 'mongoose';
 import ICar from '../Interfaces/ICar';
 import ErrorMessage from '../Middlewares/ErrorHandler';
 
@@ -28,9 +28,15 @@ export default class CarsODM {
   }
 
   async findById(id: string) {
-    if (!isValidObjectId(id)) {
-      throw new ErrorMessage(422, 'Invalid mongo id');
-    }
+    if (!isValidObjectId(id)) throw new ErrorMessage(422, 'Invalid mongo id');
     return this.model.findById({ _id: id });
+  }
+
+  async updateById(id: string, obj: Partial<ICar>) {
+    if (!isValidObjectId(id)) throw new ErrorMessage(422, 'Invalid mongo id');
+    return this.model.findByIdAndUpdate(
+      { _id: id },
+      { ...obj } as UpdateQuery<ICar>,
+    );
   }
 }

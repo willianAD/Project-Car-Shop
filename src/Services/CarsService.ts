@@ -25,9 +25,15 @@ export default class CarsService {
   async getCarById(id: string) {
     const carODM = new CarsODM();
     const getCar = await carODM.findById(id);
-    if (!getCar) {
-      throw new ErrorMessage(404, 'Car not found');
-    }
+    if (!getCar) throw new ErrorMessage(404, 'Car not found');
     return this.createCarDomain(getCar);
+  }
+
+  async updateCarById(id: string, car: ICar) {
+    const carODM = new CarsODM();
+    const getCar = await carODM.findById(id);
+    if (!getCar) throw new ErrorMessage(404, 'Car not found');
+    const updateCar = await carODM.updateById(id, car);
+    return this.createCarDomain(updateCar);
   }
 }
