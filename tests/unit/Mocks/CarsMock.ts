@@ -74,4 +74,6 @@ const updateCar = {
   seatsQty: 5,
 };
 
-export { allCars, oneCar, newCar, newCarOK, updateCar };
+const notFoundMessage = 'Car not found';
+
+export { allCars, oneCar, newCar, newCarOK, updateCar, notFoundMessage };

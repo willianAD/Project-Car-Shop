@@ -43,6 +43,7 @@ export default class CarsService {
     const carODM = new CarsODM();
     const getCar = await carODM.findById(id);
     if (!getCar) throw new ErrorMessage(404, notFoundMessage);
-    await carODM.deleteById(id);
+    const result = await carODM.deleteById(id);
+    return result;
   }
 }

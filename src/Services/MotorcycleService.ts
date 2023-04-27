@@ -44,6 +44,7 @@ export default class MotorcycleService {
     const motorcycleODM = new MotorcycleODM();
     const getMotorcycle = await motorcycleODM.findById(id);
     if (!getMotorcycle) throw new ErrorMessage(404, notFoundMessage);
-    await motorcycleODM.deleteById(id);
+    const result = await motorcycleODM.deleteById(id);
+    return result;
   }
 }

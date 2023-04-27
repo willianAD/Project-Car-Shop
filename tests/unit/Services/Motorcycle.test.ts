@@ -3,7 +3,7 @@ import Sinon from 'sinon';
 import { Model } from 'mongoose';
 import MotorcycleService from '../../../src/Services/MotorcycleService';
 import Motorcycle from '../../../src/Domains/Motorcycle';
-import { allMotorcycles, oneMotorcycles, newMotorcycles,
+import { allMotorcycles, oneMotorcycles, newMotorcycles, notFoundMessage,
   newMotorcyclesOK, updateMotorcycles } from '../Mocks/MotorcycleMock';
 import IMotorcycle from '../../../src/Interfaces/IMotorcycle';
 
@@ -66,7 +66,7 @@ describe('Devera testar todas funcionalidades da tabela motorcycles', function (
   });
 
   it('Devera buscar uma moto no banco de dados pelo ID, Erro invalid', async function () {
-    Sinon.stub(Model, 'findById').resolves(false);
+    Sinon.stub(Model, 'findById').resolves(null);
     
     try {
       const service = new MotorcycleService();
@@ -79,19 +79,19 @@ describe('Devera testar todas funcionalidades da tabela motorcycles', function (
   });
 
   it('Devera buscar uma moto no banco de dados pelo ID, Erro not found', async function () {  
-    Sinon.stub(Model, 'findById').resolves(false);
+    Sinon.stub(Model, 'findById').resolves(null);
 
     try {
       const service = new MotorcycleService();
-      await service.getMotorcycleById('644999d6008d');
+      await service.getMotorcycleById('64495692954562d93033d97b');
     } catch (error) {
-      expect((error as Error).message).to.be.deep.equal('Motorcycle not found');
+      expect((error as Error).message).to.be.deep.equal(notFoundMessage);
     }
   
     Sinon.restore();
   });
 
-  it('Devera alterar uma moto no banco de dados pelo ID', async function () {  
+  it('Devera alterar uma moto no banco de dados pelo ID, SUCESSO', async function () {  
     const motorcyclesOutPut = new Motorcycle(oneMotorcycles as IMotorcycle);
 
     Sinon.stub(Model, 'findById').resolves(motorcyclesOutPut);    
@@ -105,6 +105,47 @@ describe('Devera testar todas funcionalidades da tabela motorcycles', function (
     );
 
     expect(result).to.be.deep.equal(updateMotorcycles);
+  
+    Sinon.restore();
+  });
+
+  it('Devera alterar uma moto no banco de dados pelo ID, ERRO not found', async function () {  
+    Sinon.stub(Model, 'findById').resolves(null);
+
+    try {
+      const service = new MotorcycleService();
+      await service.updateMotorcycleById('64495692954562d93033d97b', oneMotorcycles as IMotorcycle);
+    } catch (error) {
+      expect((error as Error).message).to.be.deep.equal(notFoundMessage);
+    }
+  
+    Sinon.restore();
+  });
+
+  it('Devera deletar uma moto no banco de dados pelo ID', async function () {  
+    const motorcyclesOutPut = new Motorcycle(oneMotorcycles as IMotorcycle);
+
+    Sinon.stub(Model, 'findById').resolves(motorcyclesOutPut);    
+    Sinon.stub(Model, 'findByIdAndDelete').resolves(motorcyclesOutPut);
+    
+    const service = new MotorcycleService();
+
+    const result = await service.deleteMotorcycleById('64495692954562d93033d97a');
+
+    expect(result).to.be.deep.equal(motorcyclesOutPut);
+  
+    Sinon.restore();
+  });
+
+  it('Devera deletar uma moto no banco de dados pelo ID, ERRO not found', async function () {
+    Sinon.stub(Model, 'findById').resolves(null);
+
+    try {
+      const service = new MotorcycleService();
+      await service.deleteMotorcycleById('64495692954562d93033d97b');
+    } catch (error) {
+      expect((error as Error).message).to.be.deep.equal(notFoundMessage);
+    }
   
     Sinon.restore();
   });

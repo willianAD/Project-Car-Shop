@@ -3,7 +3,7 @@ import Sinon from 'sinon';
 import { Model } from 'mongoose';
 import CarsService from '../../../src/Services/CarsService';
 import Car from '../../../src/Domains/Car';
-import { allCars, oneCar, newCar, newCarOK, updateCar } from '../Mocks/CarsMock';
+import { allCars, oneCar, newCar, newCarOK, updateCar, notFoundMessage } from '../Mocks/CarsMock';
 
 describe('Devera testar todas funcionalidades da tabela carros', function () {
   it('Devera cadastrar um carros no banco de dados corretamente', async function () {
@@ -63,8 +63,8 @@ describe('Devera testar todas funcionalidades da tabela carros', function () {
     Sinon.restore();
   });
 
-  it('Devera buscar um carro no banco de dados pelo ID, Erro invalid', async function () {
-    Sinon.stub(Model, 'findById').resolves(false);
+  it('Devera buscar um carro no banco de dados pelo ID, ERRO invalid', async function () {
+    Sinon.stub(Model, 'findById').resolves(null);
     
     try {
       const service = new CarsService();
@@ -76,20 +76,20 @@ describe('Devera testar todas funcionalidades da tabela carros', function () {
     Sinon.restore();
   });
 
-  it('Devera buscar um carro no banco de dados pelo ID, Erro not found', async function () {  
-    Sinon.stub(Model, 'findById').resolves(false);
+  it('Devera buscar um carro no banco de dados pelo ID, ERRO not found', async function () {  
+    Sinon.stub(Model, 'findById').resolves(null);
 
     try {
       const service = new CarsService();
-      await service.getCarById('644999d6008d');
+      await service.getCarById('64495692954562d93033d97b');
     } catch (error) {
-      expect((error as Error).message).to.be.deep.equal('Car not found');
+      expect((error as Error).message).to.be.deep.equal(notFoundMessage);
     }
   
     Sinon.restore();
   });
 
-  it('Devera alterar um carro no banco de dados pelo ID', async function () {  
+  it('Devera alterar um carro no banco de dados pelo ID, SUCESSO', async function () {  
     const carOutPut = new Car(oneCar);
 
     Sinon.stub(Model, 'findById').resolves(carOutPut);    
@@ -97,9 +97,50 @@ describe('Devera testar todas funcionalidades da tabela carros', function () {
     
     const service = new CarsService();
 
-    const result = await service.updateCarById('64495692954562d93033d97a', updateCar);
+    const result = await service.updateCarById('64495692954562d93033d97a', oneCar);
 
     expect(result).to.be.deep.equal(updateCar);
+  
+    Sinon.restore();
+  });
+
+  it('Devera alterar um carro no banco de dados pelo ID, ERRO not found', async function () {  
+    Sinon.stub(Model, 'findById').resolves(null);
+
+    try {
+      const service = new CarsService();
+      await service.updateCarById('64495692954562d93033d97b', oneCar);
+    } catch (error) {
+      expect((error as Error).message).to.be.deep.equal(notFoundMessage);
+    }
+  
+    Sinon.restore();
+  });
+
+  it('Devera deletar um carro no banco de dados pelo ID, SUCESSO', async function () {  
+    const carOutPut = new Car(oneCar);
+
+    Sinon.stub(Model, 'findById').resolves(carOutPut);    
+    Sinon.stub(Model, 'findByIdAndDelete').resolves(carOutPut);
+    
+    const service = new CarsService();
+
+    const result = await service.deleteCarById('64495692954562d93033d97a');
+
+    expect(result).to.be.deep.equal(carOutPut);
+  
+    Sinon.restore();
+  });
+
+  it('Devera deletar um carro no banco de dados pelo ID, ERRO not found', async function () {
+    Sinon.stub(Model, 'findById').resolves(null);
+
+    try {
+      const service = new CarsService();
+      await service.deleteCarById('64495692954562d93033d97b');
+    } catch (error) {
+      expect((error as Error).message).to.be.deep.equal(notFoundMessage);
+    }
   
     Sinon.restore();
   });

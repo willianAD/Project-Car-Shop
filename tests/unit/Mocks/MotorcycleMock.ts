@@ -76,4 +76,7 @@ const updateMotorcycles = {
   engineCapacity: 1000,
 };
 
-export { allMotorcycles, oneMotorcycles, newMotorcycles, newMotorcyclesOK, updateMotorcycles };
+const notFoundMessage = 'Motorcycle not found';
+
+export { allMotorcycles, oneMotorcycles, newMotorcycles, newMotorcyclesOK,
+  updateMotorcycles, notFoundMessage };
