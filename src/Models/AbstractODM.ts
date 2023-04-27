@@ -1,6 +1,8 @@
 import { isValidObjectId, Model, model, models, Schema, UpdateQuery } from 'mongoose';
 import ErrorMessage from '../Middlewares/ErrorHandler';
 
+const invalidMessage = 'Invalid mongo id';
+
 export default class AbstractODM<T> {
   private schema: Schema;
   protected modelName: string;
@@ -21,15 +23,20 @@ export default class AbstractODM<T> {
   }
 
   async findById(id: string) {
-    if (!isValidObjectId(id)) throw new ErrorMessage(422, 'Invalid mongo id');
+    if (!isValidObjectId(id)) throw new ErrorMessage(422, invalidMessage);
     return this.model.findById({ _id: id });
   }
 
   async updateById(id: string, obj: Partial<T>) {
-    if (!isValidObjectId(id)) throw new ErrorMessage(422, 'Invalid mongo id');
+    if (!isValidObjectId(id)) throw new ErrorMessage(422, invalidMessage);
     return this.model.findByIdAndUpdate(
       { _id: id },
       { ...obj } as UpdateQuery<T>,
     );
+  }
+
+  async deleteById(id: string) {
+    if (!isValidObjectId(id)) throw new ErrorMessage(422, invalidMessage);
+    return this.model.findByIdAndDelete({ _id: id });
   }
 }

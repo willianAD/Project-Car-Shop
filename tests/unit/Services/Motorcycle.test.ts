@@ -21,6 +21,15 @@ describe('Devera testar todas funcionalidades da tabela motorcycles', function (
     Sinon.restore();
   });
 
+  it('Devera retornar um valor null', function () {  
+    const service = new MotorcycleService();
+    const result = service.createMotorcycleDomain(null);
+
+    expect(result).to.be.deep.equal(null);
+  
+    Sinon.restore();
+  });
+
   it('Devera buscar todas as motos no banco de dados corretamente', async function () {
     const motorcyclesOutPut = allMotorcycles.map((motorcycles) => new Motorcycle({
       id: motorcycles.id,

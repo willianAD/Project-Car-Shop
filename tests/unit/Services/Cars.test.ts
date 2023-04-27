@@ -19,6 +19,15 @@ describe('Devera testar todas funcionalidades da tabela carros', function () {
     Sinon.restore();
   });
 
+  it('Devera retornar um valor null', function () {  
+    const service = new CarsService();
+    const result = service.createCarDomain(null);
+
+    expect(result).to.be.deep.equal(null);
+  
+    Sinon.restore();
+  });
+
   it('Devera buscar todos os carros no banco de dados corretamente', async function () {
     const carOutPut = allCars.map((car) => new Car({
       id: car.id,
