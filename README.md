@@ -26,7 +26,7 @@ Aplicar os conhecimentos de MongoDB, Typescript e POO para criar uma API com CRU
 
 ## Requisitos
 
-<img src="">
+<img src="https://raw.githubusercontent.com/willianAD/Project-Car-Shop/main/image/Projeto%20Car%20Shop.png">
 
 # Requisitos Obrigatórios
 
